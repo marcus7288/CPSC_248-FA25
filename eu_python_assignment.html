@@ -1,0 +1,630 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Week 1: Introduction to Python - Basic Financial Calculator</title>
+    <style>
+        /* Evangel University Brand Colors */
+        :root {
+            --eu-red: #C8102E;
+            --eu-dark-red: #A01729;
+            --eu-gold: #FFB81C;
+            --eu-dark-gold: #E5A519;
+            --eu-navy: #1E3A5F;
+            --eu-light-gray: #F5F5F5;
+            --eu-dark-gray: #666666;
+            --eu-white: #FFFFFF;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            line-height: 1.6; 
+            margin: 0;
+            background: linear-gradient(135deg, var(--eu-light-gray) 0%, var(--eu-white) 100%);
+            color: #333; 
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header { 
+            background: linear-gradient(135deg, var(--eu-red) 0%, var(--eu-dark-red) 100%);
+            color: var(--eu-white); 
+            padding: 30px 40px; 
+            border-radius: 12px; 
+            margin-bottom: 30px;
+            box-shadow: 0 8px 25px rgba(200, 16, 46, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200%;
+            height: 200%;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="2" fill="rgba(255,255,255,0.1)"/></svg>');
+            animation: float 20s infinite linear;
+        }
+
+        @keyframes float {
+            0% { transform: translate(-50%, -50%) rotate(0deg); }
+            100% { transform: translate(-50%, -50%) rotate(360deg); }
+        }
+
+        .eu-logo-area {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .eu-shield {
+            width: 60px;
+            height: 60px;
+            background: var(--eu-gold);
+            border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 20px;
+            box-shadow: 0 4px 15px rgba(255, 184, 28, 0.4);
+        }
+
+        .eu-shield::before {
+            content: 'EU';
+            color: var(--eu-red);
+            font-weight: bold;
+            font-size: 18px;
+        }
+
+        .header h1 {
+            position: relative;
+            z-index: 2;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .header .subtitle {
+            font-size: 1.1em;
+            opacity: 0.9;
+            position: relative;
+            z-index: 2;
+        }
+
+        .course-info {
+            background: var(--eu-white);
+            border-left: 6px solid var(--eu-gold);
+            padding: 25px;
+            margin: 25px 0;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .objectives { 
+            background: linear-gradient(135deg, var(--eu-navy) 0%, #2c5282 100%);
+            color: var(--eu-white);
+            padding: 30px; 
+            border-radius: 12px; 
+            margin: 25px 0; 
+            box-shadow: 0 6px 20px rgba(30, 58, 95, 0.3);
+        }
+
+        .objectives h2 {
+            color: var(--eu-gold);
+            margin-bottom: 15px;
+            font-size: 1.8em;
+        }
+
+        .content-section { 
+            background: var(--eu-white);
+            margin: 25px 0; 
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            border-top: 4px solid var(--eu-red);
+        }
+
+        .code-example { 
+            background: #f8f9fa; 
+            border: 2px solid var(--eu-gold);
+            padding: 25px; 
+            border-radius: 8px; 
+            font-family: 'Consolas', 'Monaco', 'Courier New', monospace; 
+            overflow-x: auto;
+            margin: 20px 0;
+            position: relative;
+        }
+
+        .code-example::before {
+            content: 'Python Code';
+            position: absolute;
+            top: -10px;
+            left: 20px;
+            background: var(--eu-gold);
+            color: var(--eu-navy);
+            padding: 5px 15px;
+            border-radius: 4px;
+            font-size: 0.8em;
+            font-weight: bold;
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+        .important { 
+            background: linear-gradient(135deg, #fff3cd 0%, #ffeaa7 100%);
+            border: 2px solid var(--eu-gold);
+            padding: 20px; 
+            border-radius: 8px; 
+            margin: 20px 0;
+            border-left: 6px solid var(--eu-red);
+        }
+
+        .checklist { 
+            background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%);
+            padding: 25px; 
+            border-radius: 12px; 
+            margin: 25px 0;
+            border-left: 6px solid #28a745;
+        }
+
+        .btn { 
+            display: inline-block; 
+            padding: 15px 30px; 
+            background: linear-gradient(135deg, var(--eu-red) 0%, var(--eu-dark-red) 100%);
+            color: var(--eu-white); 
+            text-decoration: none; 
+            border-radius: 8px; 
+            margin: 10px 5px; 
+            font-weight: bold;
+            box-shadow: 0 4px 15px rgba(200, 16, 46, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .btn:hover { 
+            background: linear-gradient(135deg, var(--eu-dark-red) 0%, var(--eu-red) 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(200, 16, 46, 0.4);
+        }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, var(--eu-gold) 0%, var(--eu-dark-gold) 100%);
+            color: var(--eu-navy);
+        }
+
+        .btn-secondary:hover {
+            background: linear-gradient(135deg, var(--eu-dark-gold) 0%, var(--eu-gold) 100%);
+        }
+
+        .grid { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); 
+            gap: 25px; 
+            margin: 25px 0; 
+        }
+
+        h2 { 
+            color: var(--eu-red); 
+            border-bottom: 3px solid var(--eu-gold); 
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+            font-size: 1.8em;
+        }
+
+        h3 { 
+            color: var(--eu-navy);
+            margin-bottom: 15px;
+            font-size: 1.4em;
+        }
+
+        .assignment-container {
+            background: linear-gradient(135deg, var(--eu-light-gray) 0%, var(--eu-white) 100%);
+            border: 3px solid var(--eu-red);
+            border-radius: 15px;
+            padding: 30px;
+            margin: 30px 0;
+            box-shadow: 0 8px 25px rgba(200, 16, 46, 0.2);
+        }
+
+        .assignment-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .assignment-title {
+            background: linear-gradient(135deg, var(--eu-red) 0%, var(--eu-dark-red) 100%);
+            color: var(--eu-white);
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            font-size: 1.6em;
+            box-shadow: 0 4px 15px rgba(200, 16, 46, 0.3);
+        }
+
+        .springfield-note {
+            background: linear-gradient(135deg, var(--eu-navy) 0%, #2c5282 100%);
+            color: var(--eu-white);
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            text-align: center;
+            font-style: italic;
+        }
+
+        .valor-spirit {
+            background: linear-gradient(135deg, var(--eu-gold) 0%, var(--eu-dark-gold) 100%);
+            color: var(--eu-navy);
+            padding: 15px;
+            border-radius: 8px;
+            margin: 20px 0;
+            text-align: center;
+            font-weight: bold;
+            border: 2px solid var(--eu-red);
+        }
+
+        ul li {
+            margin-bottom: 8px;
+            line-height: 1.5;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+            
+            .header {
+                padding: 20px;
+                text-align: center;
+            }
+            
+            .header h1 {
+                font-size: 2em;
+            }
+            
+            .eu-logo-area {
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="eu-logo-area">
+                <div class="eu-shield"></div>
+                <div>
+                    <h1>🐍 Week 1: Introduction to Python</h1>
+                    <div class="subtitle">Basic Financial Calculator Assignment</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="course-info">
+            <h2>📚 Course Information</h2>
+            <p><strong>Institution:</strong> Evangel University - Springfield, Missouri</p>
+            <p><strong>Course:</strong> Introduction to Python Programming</p>
+            <p><strong>Project Theme:</strong> Personal Finance Tracker Development</p>
+            <p><strong>Duration:</strong> Week 1 of 15-Week Comprehensive Program</p>
+            <p><strong>Christian Education Focus:</strong> Integrating technological skills with biblical stewardship principles</p>
+        </div>
+
+        <div class="springfield-note">
+            "Preparing students in the heart of Missouri to be wise stewards of both technology and resources"
+        </div>
+
+        <div class="objectives">
+            <h2>🎯 Learning Objectives</h2>
+            <p><strong>By the end of this week, Evangel students will be able to:</strong></p>
+            <ul>
+                <li>Set up and navigate an online Python development environment (CodeSandbox)</li>
+                <li>Understand fundamental Python syntax and programming concepts</li>
+                <li>Write their first Python program incorporating input and output operations</li>
+                <li>Perform essential mathematical operations for financial stewardship calculations</li>
+                <li>Create a functional financial calculator demonstrating biblical principles of money management</li>
+                <li>Format and display financial data in a professional, user-friendly manner</li>
+                <li>Apply Christian values of stewardship through practical programming applications</li>
+            </ul>
+        </div>
+
+        <div class="valor-spirit">
+            🏛️ Embrace the Valor Spirit: Excellence in Education, Faith in Action 🏛️
+        </div>
+
+        <div class="assignment-container">
+            <div class="assignment-header">
+                <div class="assignment-title">
+                    💰 HANDS-ON ASSIGNMENT: Basic Financial Calculator
+                </div>
+                <p><strong>Evangel University Computer Science Department</strong></p>
+                <p>Springfield, Missouri • Assemblies of God University</p>
+            </div>
+
+            <div class="content-section">
+                <h2>📋 Assignment Overview</h2>
+                <p>As future stewards and leaders, Evangel students will develop a Python-based financial calculator that demonstrates both technical proficiency and biblical principles of financial stewardship. This foundational project begins your journey in creating technology solutions that serve others and honor God.</p>
+
+                <div class="important">
+                    <h3>🙏 Biblical Foundation</h3>
+                    <p><em>"Whoever can be trusted with very little can also be trusted with much"</em> - Luke 16:10</p>
+                    <p>This assignment helps you develop tools for wise financial stewardship, a key biblical principle.</p>
+                </div>
+            </div>
+
+            <div class="content-section">
+                <h2>💻 Programming Task</h2>
+                <p>Create a Python program that serves as a comprehensive personal finance calculator. Your program should embody the Evangel values of excellence and service.</p>
+
+                <div class="code-example">
+# Evangel University - Week 1 Python Assignment
+# Student: [Your Name]
+# Basic Financial Calculator - Demonstrating Biblical Stewardship
+
+print("=" * 50)
+print("  EVANGEL UNIVERSITY FINANCIAL CALCULATOR")
+print("    Springfield, MO • Christian Excellence")
+print("=" * 50)
+print("💡 'Whoever can be trusted with very little")
+print("   can also be trusted with much' - Luke 16:10")
+print("=" * 50)
+
+# Welcome message with Evangel spirit
+print("\n🎓 Welcome, Evangel Student!")
+print("Let's practice wise financial stewardship together!")
+
+# Get user input for comprehensive financial planning
+print("\n📊 Please enter your monthly financial information:")
+name = input("Your name: ")
+monthly_income = float(input("Monthly income: $"))
+rent_housing = float(input("Monthly rent/housing: $"))
+groceries = float(input("Monthly grocery budget: $"))
+utilities = float(input("Monthly utilities: $"))
+transportation = float(input("Monthly transportation: $"))
+tithe_offering = float(input("Monthly tithe/offering: $"))
+
+# Calculate financial metrics
+total_expenses = rent_housing + groceries + utilities + transportation + tithe_offering
+remaining_income = monthly_income - total_expenses
+annual_income = monthly_income * 12
+annual_savings_potential = remaining_income * 12
+
+# Display comprehensive financial summary
+print("\n" + "=" * 50)
+print(f"    📈 FINANCIAL SUMMARY FOR {name.upper()}")
+print("    Evangel University Financial Analysis")
+print("=" * 50)
+print(f"Monthly Income:              ${monthly_income:>10.2f}")
+print(f"Housing/Rent:                ${rent_housing:>10.2f}")
+print(f"Groceries:                   ${groceries:>10.2f}")
+print(f"Utilities:                   ${utilities:>10.2f}")
+print(f"Transportation:              ${transportation:>10.2f}")
+print(f"Tithe/Offering:              ${tithe_offering:>10.2f}")
+print("-" * 50)
+print(f"Total Monthly Expenses:      ${total_expenses:>10.2f}")
+print(f"Remaining Income:            ${remaining_income:>10.2f}")
+print("=" * 50)
+
+# Provide personalized financial guidance
+print(f"\n🔍 FINANCIAL STEWARDSHIP ANALYSIS:")
+if remaining_income > 0:
+    print(f"✅ Excellent, {name}! You have ${remaining_income:.2f} remaining monthly.")
+    print(f"💰 Annual savings potential: ${annual_savings_potential:.2f}")
+    
+    # Calculate percentages for stewardship insights
+    housing_percentage = (rent_housing / monthly_income) * 100
+    tithe_percentage = (tithe_offering / monthly_income) * 100
+    
+    print(f"\n📊 STEWARDSHIP INSIGHTS:")
+    print(f"• Housing: {housing_percentage:.1f}% of income")
+    print(f"• Tithe/Giving: {tithe_percentage:.1f}% of income")
+    
+    if housing_percentage > 30:
+        print("⚠️  Consider reducing housing costs (ideal: under 30%)")
+    if tithe_percentage >= 10:
+        print("🙏 Faithful in tithing - honoring biblical principles!")
+    
+else:
+    overspent = abs(remaining_income)
+    print(f"⚠️  {name}, you're overspending by ${overspent:.2f} monthly.")
+    print("💡 Consider prayer and wise planning to adjust your budget.")
+    print("📖 'The plans of the diligent lead to profit' - Proverbs 21:5")
+
+# Future planning encouragement
+print(f"\n🌟 FUTURE OPPORTUNITIES:")
+print("As an Evangel student, consider how God might use")
+print("your growing financial wisdom to serve others!")
+
+print(f"\n🏛️ Thank you for completing this assignment!")
+print("Go Valor! 🔴⚪")
+print("=" * 50)
+                </div>
+            </div>
+
+            <div class="content-section">
+                <h2>✅ Assignment Requirements</h2>
+                <div class="checklist">
+                    <h3>📋 Technical Requirements:</h3>
+                    <ul>
+                        <li>□ Create a CodeSandbox account using your Evangel email</li>
+                        <li>□ Implement the complete financial calculator program</li>
+                        <li>□ Include all specified input fields (income, expenses, tithe)</li>
+                        <li>□ Perform accurate mathematical calculations</li>
+                        <li>□ Display formatted output with proper dollar signs and decimals</li>
+                        <li>□ Include conditional logic for personalized recommendations</li>
+                        <li>□ Add percentage calculations for stewardship insights</li>
+                        <li>□ Test your program with various input scenarios</li>
+                    </ul>
+                </div>
+
+                <div class="checklist">
+                    <h3>🎓 Evangel University Standards:</h3>
+                    <ul>
+                        <li>□ Include Evangel University branding in output</li>
+                        <li>□ Incorporate biblical principles and verses appropriately</li>
+                        <li>□ Demonstrate Christian values of stewardship</li>
+                        <li>□ Write clean, commented code reflecting excellence</li>
+                        <li>□ Submit on time, demonstrating personal responsibility</li>
+                        <li>□ Show Valor spirit in your approach to learning</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="content-section">
+                <h2>🚀 Getting Started</h2>
+                <div class="grid">
+                    <div>
+                        <h3>Step 1: Environment Setup</h3>
+                        <ol>
+                            <li>Visit <a href="https://codesandbox.io" target="_blank">CodeSandbox.io</a></li>
+                            <li>Create account with your @evangel.edu email</li>
+                            <li>Create new Python sandbox</li>
+                            <li>Name it "EU_Week1_Financial_Calculator"</li>
+                        </ol>
+                    </div>
+                    <div>
+                        <h3>Step 2: Implementation</h3>
+                        <ol>
+                            <li>Copy the starter code from above</li>
+                            <li>Add your name in the comment section</li>
+                            <li>Test the program with sample data</li>
+                            <li>Customize output messages</li>
+                        </ol>
+                    </div>
+                </div>
+
+                <div class="important">
+                    <h3>💡 Evangel Success Tips</h3>
+                    <ul>
+                        <li><strong>Start with Prayer:</strong> Ask for wisdom and understanding</li>
+                        <li><strong>Test Thoroughly:</strong> Try different income/expense scenarios</li>
+                        <li><strong>Seek Help:</strong> Use office hours and peer support</li>
+                        <li><strong>Reflect on Application:</strong> How can this serve God's kingdom?</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="content-section">
+                <h2>📝 Submission Instructions</h2>
+                <p><strong>Due Date:</strong> [Insert Due Date] by 11:59 PM CST</p>
+                
+                <div class="grid">
+                    <div class="checklist">
+                        <h3>What to Submit:</h3>
+                        <ul>
+                            <li>□ CodeSandbox public link to your working program</li>
+                            <li>□ Screenshot of your program's output</li>
+                            <li>□ Brief reflection (2-3 sentences) on how this applies biblical stewardship</li>
+                        </ul>
+                    </div>
+                    <div class="important">
+                        <h3>Submission Format:</h3>
+                        <p>Submit through Canvas with:</p>
+                        <ul>
+                            <li>CodeSandbox link</li>
+                            <li>Screenshot attachment</li>
+                            <li>Reflection in text box</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="content-section">
+                <h2>📊 Grading Rubric</h2>
+                <table style="width: 100%; border-collapse: collapse; margin: 20px 0;">
+                    <tr style="background: var(--eu-red); color: white;">
+                        <th style="padding: 12px; border: 1px solid #ddd;">Criteria</th>
+                        <th style="padding: 12px; border: 1px solid #ddd;">Excellent (A)</th>
+                        <th style="padding: 12px; border: 1px solid #ddd;">Good (B)</th>
+                        <th style="padding: 12px; border: 1px solid #ddd;">Needs Improvement (C)</th>
+                    </tr>
+                    <tr style="background: var(--eu-light-gray);">
+                        <td style="padding: 12px; border: 1px solid #ddd;"><strong>Code Functionality</strong></td>
+                        <td style="padding: 12px; border: 1px solid #ddd;">Program runs perfectly with all features</td>
+                        <td style="padding: 12px; border: 1px solid #ddd;">Program runs with minor issues</td>
+                        <td style="padding: 12px; border: 1px solid #ddd;">Program has significant errors</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 12px; border: 1px solid #ddd;"><strong>Code Quality</strong></td>
+                        <td style="padding: 12px; border: 1px solid #ddd;">Clean, well-commented, professional</td>
+                        <td style="padding: 12px; border: 1px solid #ddd;">Generally clean with some comments</td>
+                        <td style="padding: 12px; border: 1px solid #ddd;">Messy or poorly organized</td>
+                    </tr>
+                    <tr style="background: var(--eu-light-gray);">
+                        <td style="padding: 12px; border: 1px solid #ddd;"><strong>Biblical Integration</strong></td>
+                        <td style="padding: 12px; border: 1px solid #ddd;">Thoughtful integration of stewardship principles</td>
+                        <td style="padding: 12px; border: 1px solid #ddd;">Some biblical references included</td>
+                        <td style="padding: 12px; border: 1px solid #ddd;">Minimal or inappropriate integration</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 12px; border: 1px solid #ddd;"><strong>EU Standards</strong></td>
+                        <td style="padding: 12px; border: 1px solid #ddd;">Exceeds expectations, shows Valor spirit</td>
+                        <td style="padding: 12px; border: 1px solid #ddd;">Meets university standards</td>
+                        <td style="padding: 12px; border: 1px solid #ddd;">Below expected standards</td>
+                    </tr>
+                </table>
+            </div>
+
+            <div class="content-section">
+                <h2>🤝 Support Resources</h2>
+                <div class="grid">
+                    <div>
+                        <h3>🏫 Evangel University Support</h3>
+                        <ul>
+                            <li>Computer Science Department Office Hours</li>
+                            <li>Peer Tutoring Center</li>
+                            <li>Academic Success Center</li>
+                            <li>Campus Technology Help Desk</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h3>📚 Learning Resources</h3>
+                        <ul>
+                            <li><a href="https://python.org/tutorial/" target="_blank">Official Python Tutorial</a></li>
+                            <li><a href="https://w3schools.com/python/" target="_blank">W3Schools Python Guide</a></li>
+                            <li>Evangel Library Python Resources</li>
+                            <li>Christian Technology Ethics Readings</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="valor-spirit">
+                🔴⚪ "Excellence in Education, Faith in Action" - Go Valor! ⚪🔴
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2>🎯 Looking Ahead</h2>
+            <p>This Week 1 assignment establishes the foundation for your semester-long Personal Finance Tracker project. Throughout the 15-week course, you'll progressively add features like:</p>
+            <ul>
+                <li><strong>Week 2:</strong> Variable management and data storage</li>
+                <li><strong>Week 3:</strong> Data type handling and validation</li>
+                <li><strong>Week 4:</strong> Smart decision-making with conditional logic</li>
+                <li><strong>Week 5:</strong> Repetitive tasks with loops</li>
+                <li><strong>And much more...</strong> Building toward a comprehensive financial management system</li>
+            </ul>
+            
+            <div class="important">
+                <p><strong>Remember:</strong> Each week builds upon the previous, so master these fundamentals well. Your dedication now will serve you throughout your academic journey at Evangel and beyond in your professional calling.</p>
+            </div>
+        </div>
+
+        <div class="springfield-note">
+            <p>🏛️ <strong>Evangel University - Springfield, Missouri</strong></p>
+            <p>"A comprehensive Christian university committed to excellence in educating and equipping students to be fully-devoted followers of Christ"</p>
+        </div>
+    </div>
+</body>
+</html>
